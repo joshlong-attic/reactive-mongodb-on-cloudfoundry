@@ -1,0 +1,14 @@
+applications:
+- name: my-mongo-app
+  instances: 1
+  memory: 1024M
+  disk_quota: 1024M
+  path: ./target/demo-0.0.1-SNAPSHOT.jar
+  routes:
+  - route: my-mongo-app.cfapps.io
+  buildpack: java_buildpack
+  env:
+    JBP_CONFIG_SPRING_AUTO_RECONFIGURATION: '{enabled: false}'
+  services:
+  - mdbdb
+  stack: cflinuxfs2
