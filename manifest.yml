@@ -9,6 +9,7 @@ applications:
   buildpack: java_buildpack
   env:
     JBP_CONFIG_SPRING_AUTO_RECONFIGURATION: '{enabled: false}'
+    SPRING_PROFILES_ACTIVE: cloud
   services:
-  - mdbdb
+  - reactive-mongo-db
   stack: cflinuxfs2
