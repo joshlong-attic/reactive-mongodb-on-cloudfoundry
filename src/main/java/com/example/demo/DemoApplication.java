@@ -3,7 +3,6 @@ package com.example.demo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.reactivestreams.Publisher;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,13 +10,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.server.RequestPredicates;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import reactor.core.publisher.Flux;
 
+import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
@@ -25,17 +21,8 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 public class DemoApplication {
 
 	@Bean
-	RouterFunction<?> routes() {
-		return route(RequestPredicates.GET("/hi"), request -> ok().body(Flux.just("Hello, world"), String.class));
-	}
-
-	@RestController
-	public static class GreetingsRestController {
-
-		@GetMapping("/hello/{name}")
-		Publisher<String> hello(@PathVariable String name) {
-			return Flux.just("Hello, " + name + "!");
-		}
+	RouterFunction<?> routes(PersonRepository personRepository) {
+		return route(GET("/people"), req -> ok().body(personRepository.findAll(), Person.class));
 	}
 
 	@Bean
